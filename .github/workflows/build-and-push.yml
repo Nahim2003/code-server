@@ -23,7 +23,7 @@ jobs:
       - name: Build, tag, and push ecs-codeserver image to ECR
         uses: docker/build-push-action@v5
         with:
-          context: ./app
+          context: .
           file: Dockerfile
           push: true
           tags: |
