@@ -182,8 +182,8 @@ resource "aws_ecs_service" "ecs-codeserver-tf-service" {
   task_definition = aws_ecs_task_definition.ecs-codeserver-tf-task.arn
   launch_type     = "FARGATE"
   desired_count   = 1
- 
- 
+
+
   network_configuration {
     subnets          = [aws_subnet.ecs-codeserver-subnet.id, aws_subnet.ecs-codeserver-subnet-2.id]
     security_groups  = [aws_security_group.ecs-codeserver-sg.id]
@@ -206,7 +206,7 @@ resource "aws_lb_listener" "ecs-codeserver-tf-alb-listener" {
   protocol          = "HTTP"
 
   default_action {
-      type             = "forward"
-      target_group_arn = aws_lb_target_group.ecs-codeserver-tf-alb-tg.arn
-    }
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.ecs-codeserver-tf-alb-tg.arn
   }
+}
