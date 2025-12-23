@@ -1,6 +1,7 @@
 // 1) Imports
 const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
+const { version } = require('react');
 
 // 2) App + port
 const app = express();
@@ -8,7 +9,7 @@ const PORT = 3000; // you can keep this for now
 
 // 3) Health route
 app.get('/health', (req, res) => {
-  res.json({"status": "ok"});
+  res.json({ status: "ok", version: "1" });
 });
 
 // 4) Proxy everything else to code-server on 127.0.0.1:8080
