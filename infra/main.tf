@@ -164,15 +164,25 @@ resource "aws_ecs_task_definition" "ecs-codeserver-tf-task" {
 
   container_definitions = jsonencode([
     {
-      name  = "codeserver"
-      image = "764283926008.dkr.ecr.us-east-1.amazonaws.com/ecs-codeserver:latest"
+      name      = "codeserver"
+      image     = "764283926008.dkr.ecr.us-east-1.amazonaws.com/ecs-codeserver:latest"
+      essential = true
       portMappings = [
         {
           containerPort = 3000
-          hostPort      = 3000
           protocol      = "tcp"
         }
       ]
+      command = ["/app/start.sh"]
+
+      logconfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = "/ecs/ecs-codeserver-task"
+          "awslogs-region"        = "us-east-1"
+          "awslogs-stream-prefix" = "ecs"
+        }
+      }
     }
   ])
 }
