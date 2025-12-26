@@ -28,6 +28,18 @@ jobs:
           terraform fmt -check
           terraform validate
           terraform apply -auto-approve -input=false
-      - name: Check /health endpoint
+      - name: Wait for service and check /health endpoint
         run: |
-          curl -f https://tm.nahim-dev.com/health    
+          echo "Waiting for service to become healthy..."
+          for i in {1..20}; do
+            if curl -fsS https://tm.nahim-dev.com/health; then
+              echo "Service is healthy ✅"
+              exit 0
+            fi
+            echo "Health check failed, retrying in 10s... (attempt $i/20)"
+            sleep 10
+          done
+
+          echo "Service did not become healthy in time ❌"
+          exit 1
+   
