@@ -181,6 +181,8 @@ resource "aws_ecs_task_definition" "ecs-codeserver-tf-task" {
           "awslogs-group"         = "/ecs/ecs-codeserver-task"
           "awslogs-region"        = "us-east-1"
           "awslogs-stream-prefix" = "ecs"
+
+          health_check_path = "/health"
         }
       }
     }
