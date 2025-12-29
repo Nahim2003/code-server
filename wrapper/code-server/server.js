@@ -2,7 +2,7 @@ const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });

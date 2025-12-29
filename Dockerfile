@@ -19,5 +19,5 @@ WORKDIR /app/wrapper/code-server
 COPY --from=builder /app/wrapper/code-server /app/wrapper/code-server
 COPY start.sh ./start.sh
 
-EXPOSE 3000
+EXPOSE 3001
 ENTRYPOINT ["./start.sh"]

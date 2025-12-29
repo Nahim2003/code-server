@@ -82,8 +82,8 @@ resource "aws_security_group" "ecs-codeserver-tasks-sg" {
   vpc_id = aws_vpc.ecs-codeserver-vpc.id
 
   ingress {
-    from_port       = 3000
-    to_port         = 3000
+    from_port       = 3001
+    to_port         = 3001
     protocol        = "tcp"
     security_groups = [aws_security_group.ecs-codeserver-sg.id]
   }
@@ -114,7 +114,7 @@ resource "aws_lb" "ecs-codeserver-tf-alb" {
 resource "aws_lb_target_group" "ecs-codeserver-tf-alb-tg" {
   name        = "ecs-codeserver-tf-alb-tg"
   vpc_id      = aws_vpc.ecs-codeserver-vpc.id
-  port        = 3000
+  port        = 3001
   protocol    = "HTTP"
   target_type = "ip"
   health_check {
@@ -169,7 +169,7 @@ resource "aws_ecs_task_definition" "ecs-codeserver-tf-task" {
       essential = true
       portMappings = [
         {
-          containerPort = 3000
+          containerPort = 3001
           protocol      = "tcp"
         }
       ]
@@ -202,7 +202,7 @@ resource "aws_ecs_service" "ecs-codeserver-tf-service" {
   load_balancer {
     target_group_arn = aws_lb_target_group.ecs-codeserver-tf-alb-tg.arn
     container_name   = "codeserver"
-    container_port   = 3000
+    container_port   = 3001
   }
 }
 
