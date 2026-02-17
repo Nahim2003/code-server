@@ -10,7 +10,7 @@ Client → Route53 → ALB (443 HTTPS) → Target Group (HTTP 8080) → ECS Farg
 
 ## Key Config
 
-- code-server binds: 0.0.0.0:8080
+* code-server binds: 0.0.0.0:8080
 
 - Target group: ip targets, port 8080
 
