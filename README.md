@@ -12,13 +12,13 @@ Client → Route53 → ALB (443 HTTPS) → Target Group (HTTP 8080) → ECS Farg
 
 * code-server binds: 0.0.0.0:8080
 
-- Target group: ip targets, port 8080
+Target group: ip targets, port 8080
 
-- Health check: GET /login (200–399)
+Health check: GET /login (200–399)
 
-- HTTPS terminated at ALB (ACM cert)
+HTTPS terminated at ALB (ACM cert)
 
-- Image built for linux/amd64 (required for Fargate)
+Image built for linux/amd64 (required for Fargate)
 
 ## Deploy
 terraform init
