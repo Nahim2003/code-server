@@ -12,13 +12,13 @@ Client → Route53 → ALB (443 HTTPS) → Target Group (HTTP 8080) → ECS Farg
 
 * code-server binds: 0.0.0.0:8080
 
-Target group: ip targets, port 8080
+* Target group: ip targets, port 8080
 
-Health check: GET /login (200–399)
+* Health check: GET /login (200–399)
 
-HTTPS terminated at ALB (ACM cert)
+* HTTPS terminated at ALB (ACM cert)
 
-Image built for linux/amd64 (required for Fargate)
+* Image built for linux/amd64 (required for Fargate)
 
 ## Deploy
 terraform init
@@ -45,10 +45,10 @@ aws elbv2 describe-target-health --region us-east-1 --target-group-arn <TG_ARN>
 
 ## Debugging Highlights
 
-Fixed 502/503/504 from port/health-check mismatches
+* Fixed 502/503/504 from port/health-check mismatches
 
-Fixed WebSocket errors by aligning ALB → container flow
+* Fixed WebSocket errors by aligning ALB → container flow
 
-Fixed CannotPullContainerError (linux/amd64) with buildx --platform linux/amd64
+* Fixed CannotPullContainerError (linux/amd64) with buildx --platform linux/amd64
 
-Resolved Terraform SG rule drift via import/state cleanup
+* Resolved Terraform SG rule drift via import/state cleanup
