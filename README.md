@@ -1,4 +1,4 @@
-ECS Fargate + code-server (Terraform)
+## ECS Fargate + code-server (Terraform)
 
 Deploys code-server (VS Code in the browser) on AWS using ECS Fargate, ALB (HTTPS), ACM, Route 53, and ECR, fully managed with Terraform.
 
