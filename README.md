@@ -4,11 +4,11 @@ Deploys code-server (VS Code in the browser) on AWS using ECS Fargate, ALB (HTTP
 
 URL: https://tm.nahim-dev.com
 
-Architecture
+## Architecture
 
 Client → Route53 → ALB (443 HTTPS) → Target Group (HTTP 8080) → ECS Fargate Task (code-server)
 
-Key Config
+## Key Config
 
 code-server binds: 0.0.0.0:8080
 
@@ -20,11 +20,11 @@ HTTPS terminated at ALB (ACM cert)
 
 Image built for linux/amd64 (required for Fargate)
 
-Deploy
+## Deploy
 terraform init
 terraform apply
 
-Build + Push (ECR)
+## Build + Push (ECR)
 aws ecr get-login-password --region us-east-1 \
 | docker login --username AWS --password-stdin 764283926008.dkr.ecr.us-east-1.amazonaws.com
 
@@ -32,18 +32,18 @@ docker buildx build --platform linux/amd64 -t ecs-codeserver:vX .
 docker tag ecs-codeserver:vX 764283926008.dkr.ecr.us-east-1.amazonaws.com/ecs-codeserver:vX
 docker push 764283926008.dkr.ecr.us-east-1.amazonaws.com/ecs-codeserver:vX
 
-Force ECS redeploy
+## Force ECS redeploy
 aws ecs update-service \
   --region us-east-1 \
   --cluster ecs-codeserver-tf-cluster \
   --service ecs-codeserver-tf-service \
   --force-new-deployment
 
-Verify
+## Verify
 curl -I https://tm.nahim-dev.com/login
 aws elbv2 describe-target-health --region us-east-1 --target-group-arn <TG_ARN>
 
-Debugging Highlights
+## Debugging Highlights
 
 Fixed 502/503/504 from port/health-check mismatches
 
