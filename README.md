@@ -4,7 +4,7 @@ Deploys code-server (VS Code in the browser) on AWS using ECS Fargate, ALB (HTTP
 
 URL: https://tm.nahim-dev.com
 
-## Architecture
+### Architecture
 
 Client → Route53 → ALB (443 HTTPS) → Target Group (HTTP 8080) → ECS Fargate Task (code-server)
 
