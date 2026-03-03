@@ -53,4 +53,5 @@ aws elbv2 describe-target-health --region us-east-1 --target-group-arn <TG_ARN>
 
 - Resolved Terraform SG rule drift via import/state cleanup
 ## Live demo
+[recording-2026-03-03-15-16-01.webm](https://github.com/user-attachments/assets/97e836b8-d4f1-44a7-9b36-869e3638e794)
 
