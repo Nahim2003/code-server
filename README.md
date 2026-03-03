@@ -7,6 +7,9 @@ URL: https://tm.nahim-dev.com
 ## Architecture
 
 Client → Route53 → ALB (443 HTTPS) → Target Group (HTTP 8080) → ECS Fargate Task (code-server)
+<img width="1371" height="1356" alt="ecs diagram drawio" src="https://github.com/user-attachments/assets/b7e5128e-4cbf-43c1-aa9e-9fb246d058bc" />
+
+
 
 ## Key Config
 
