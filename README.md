@@ -7,7 +7,7 @@ URL: https://tm.nahim-dev.com
 ## Architecture
 
 Client → Route53 → ALB (443 HTTPS) → Target Group (HTTP 8080) → ECS Fargate Task (code-server)
-<img width="1371" height="1356" alt="ecs diagram drawio" src="https://github.com/user-attachments/assets/b7e5128e-4cbf-43c1-aa9e-9fb246d058bc" />
+<img width="700" height="700" alt="ecs diagram drawio" src="https://github.com/user-attachments/assets/b7e5128e-4cbf-43c1-aa9e-9fb246d058bc" />
 
 
 
@@ -56,5 +56,8 @@ aws elbv2 describe-target-health --region us-east-1 --target-group-arn <TG_ARN>
 
 - Resolved Terraform SG rule drift via import/state cleanup
 ## Live demo
-[recording-2026-03-03-15-16-01.webm](https://github.com/user-attachments/assets/97e836b8-d4f1-44a7-9b36-869e3638e794)
+<video src="https://github.com/user-attachments/assets/97e836b8-d4f1-44a7-9b36-869e3638e794"
+       width="700"
+       controls>
+</video>
 
