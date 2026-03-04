@@ -1,6 +1,12 @@
-## ECS Fargate + code-server (Terraform)
+## Project Overview
 
-Deploys code-server (VS Code in the browser) on AWS using ECS Fargate, ALB (HTTPS), ACM, Route 53, and ECR, fully managed with Terraform.
+This project deploys code-server to AWS using containerised infrastructure.
+
+The environment is provisioned using Terraform and runs on ECS Fargate behind an
+Application Load Balancer with HTTPS termination.
+
+The goal of this project was to build a production-style container deployment
+using AWS networking, load balancing, and infrastructure as code.
 
 URL: https://tm.nahim-dev.com
 
@@ -11,7 +17,17 @@ Client → Route53 → ALB (443 HTTPS) → Target Group (HTTP 8080) → ECS Farg
   <img src="https://github.com/user-attachments/assets/b7e5128e-4cbf-43c1-aa9e-9fb246d058bc" width="700" alt="ECS architecture diagram" />
 </p>
 
+## Tech Stack
 
+- AWS ECS Fargate
+- Application Load Balancer
+- Route 53
+- AWS Certificate Manager
+- Amazon VPC
+- Terraform
+- Docker
+- Amazon ECR
+- code-server
 
 ## Key Config
 
