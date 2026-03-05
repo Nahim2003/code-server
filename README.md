@@ -44,23 +44,6 @@ Client → Route53 → ALB (443 HTTPS) → Target Group (HTTP 8080) → ECS Farg
 6. The container runs **code-server** on port `8080`.
 7. ALB health checks (`/login`) ensure the container is healthy and available.
 
-## Lessons Learned
-
-While building this project I encountered several real-world deployment issues:
-
-- **ALB health check failures** caused ECS tasks to continuously drain.
-- **WebSocket errors** when accessing code-server through the load balancer.
-- **Docker architecture mismatch** between ARM (local machine) and AMD64 (ECS runtime).
-- **Target group misconfiguration** that caused tasks to register but fail health checks.
-- **Terraform state conflicts** when modifying security group rules.
-
-Debugging these issues improved my understanding of:
-
-- ECS service deployments
-- ALB target groups and health checks
-- Docker image architecture
-- Terraform infrastructure lifecycle
-
 ## Key Config
 
 * code-server binds: 0.0.0.0:8080
@@ -118,3 +101,20 @@ aws elbv2 describe-target-health --region us-east-1 --target-group-arn <TG_ARN>
 - Configure ECS service autoscaling
 - Deploy ECS tasks in private subnets
 - Add WAF protection in front of the ALB
+
+## Lessons Learned
+
+While building this project I encountered several real-world deployment issues:
+
+- **ALB health check failures** caused ECS tasks to continuously drain.
+- **WebSocket errors** when accessing code-server through the load balancer.
+- **Docker architecture mismatch** between ARM (local machine) and AMD64 (ECS runtime).
+- **Target group misconfiguration** that caused tasks to register but fail health checks.
+- **Terraform state conflicts** when modifying security group rules.
+
+Debugging these issues improved my understanding of:
+
+- ECS service deployments
+- ALB target groups and health checks
+- Docker image architecture
+- Terraform infrastructure lifecycle
