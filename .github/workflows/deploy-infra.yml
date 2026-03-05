@@ -1,45 +1,62 @@
 name: Deploy Infrastructure
+
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+    paths:
+      - "infra/**"
+      - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
+
       - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v3    
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.9.8
-      - name: Terraform init, validate, and apply
+
+      - name: Terraform init
+        working-directory: infra
+        run: terraform init -input=false
+
+      - name: Terraform fmt + validate
         working-directory: infra
         run: |
-          terraform init -input=false
           terraform fmt -check
           terraform validate
-          terraform apply -auto-approve -input=false
-      - name: Wait for service and check /health endpoint
+
+      - name: Terraform plan
+        working-directory: infra
+        run: terraform plan -input=false -out=tfplan
+
+      - name: Terraform apply
+        working-directory: infra
+        run: terraform apply -auto-approve -input=false tfplan
+
+      - name: Wait for service and check /login endpoint
         run: |
-          echo "Waiting for service to become healthy..."
-          for i in {1..20}; do
-            if curl -fsS https://tm.nahim-dev.com/health; then
+          echo "Waiting for service..."
+          for i in {1..30}; do
+            code=$(curl -fsS -o /dev/null -w "%{http_code}" https://tm.nahim-dev.com/login || true)
+            if [ "$code" = "200" ]; then
               echo "Service is healthy ✅"
               exit 0
             fi
-            echo "Health check failed, retrying in 10s... (attempt $i/20)"
+            echo "Got HTTP $code, retrying in 10s... (attempt $i/30)"
             sleep 10
           done
-
           echo "Service did not become healthy in time ❌"
           exit 1
-   
