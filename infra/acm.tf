@@ -3,7 +3,7 @@ data "aws_route53_zone" "selected" {
   private_zone = false
 }
 
-resource "aws_acm_certificate" "ecs-codeserver-cert" {
+resource "aws_acm_certificate" "ecs_codeserver_cert" {
   domain_name       = "tm.nahim-dev.com"
   validation_method = "DNS"
 
@@ -16,15 +16,9 @@ resource "aws_acm_certificate" "ecs-codeserver-cert" {
   }
 }
 
-resource "aws_acm_certificate_validation" "tm" {
-  certificate_arn         = aws_acm_certificate.ecs-codeserver-cert.arn
-  depends_on              = [aws_route53_record.cert_validation]
-  validation_record_fqdns = [aws_route53_record.cert_validation["tm.nahim-dev.com"].fqdn]
-}
-
 resource "aws_route53_record" "cert_validation" {
   for_each = {
-    for dvo in aws_acm_certificate.ecs-codeserver-cert.domain_validation_options :
+    for dvo in aws_acm_certificate.ecs_codeserver_cert.domain_validation_options :
     dvo.domain_name => {
       name   = dvo.resource_record_name
       type   = dvo.resource_record_type
@@ -40,7 +34,7 @@ resource "aws_route53_record" "cert_validation" {
 }
 
 resource "aws_acm_certificate_validation" "ecs_codeserver" {
-  certificate_arn = aws_acm_certificate.ecs-codeserver-cert.arn
+  certificate_arn = aws_acm_certificate.ecs_codeserver_cert.arn
 
   validation_record_fqdns = [
     for r in aws_route53_record.cert_validation : r.fqdn
