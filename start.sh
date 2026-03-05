@@ -1,8 +1,7 @@
 #!/bin/sh
 set -e
 
-echo "Starting code-server..."
-code-server --bind-addr 0.0.0.0:8080 &
-
-echo "Starting node wrapper..."
-node /app/wrapper/code-server/server.js
+exec code-server \
+  --bind-addr 0.0.0.0:8080 \
+  --proxy-domain tm.nahim-dev.com \
+  --trusted-origins https://tm.nahim-dev.com
