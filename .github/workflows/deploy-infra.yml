@@ -46,6 +46,14 @@ jobs:
         working-directory: infra
         run: terraform apply -auto-approve -input=false tfplan
 
+      - name: Force ECS deployment
+        run: |
+          aws ecs update-service \
+            --cluster ecs-codeserver-tf-cluster \
+            --service ecs-codeserver-tf-service \
+            --force-new-deployment \
+            --region us-east-1
+
       - name: Wait for service and check /login endpoint
         run: |
           echo "Waiting for service..."
