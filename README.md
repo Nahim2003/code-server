@@ -110,6 +110,7 @@ Pipeline flow:
 This enables automated end-to-end deployment.
 
 <img width="1430" height="791" alt="Screenshot 2026-03-07 at 00 23 00" src="https://github.com/user-attachments/assets/1331944d-a750-4b89-b08e-f358e27ed4cf" />
+<img width="1436" height="697" alt="Screenshot 2026-03-07 at 00 27 04" src="https://github.com/user-attachments/assets/b8f189db-0968-4b3d-a17f-cc2ecf94b3fb" />
 
 
 ## Future Improvements
