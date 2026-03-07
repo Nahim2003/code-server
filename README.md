@@ -137,3 +137,9 @@ Debugging these issues improved my understanding of:
 - ALB target groups and health checks
 - Docker image architecture
 - Terraform infrastructure lifecycle
+
+## Deployment Status
+
+This project was deployed to AWS ECS Fargate behind an Application Load Balancer with a custom domain via Route53.
+
+The infrastructure has since been destroyed to avoid ongoing AWS charges, but the full infrastructure code and CI/CD pipeline remain in the repository.
