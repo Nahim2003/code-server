@@ -1,3 +1,4 @@
+![CI](https://github.com/Nahim2003/code-server/actions/workflows/build-and-push.yml/badge.svg)
 ## Project Overview
 
 This project deploys code-server to AWS using containerised infrastructure.
@@ -93,6 +94,20 @@ aws elbv2 describe-target-health --region us-east-1 --target-group-arn <TG_ARN>
        width="700"
        controls>
 </video>
+
+## CI/CD Pipeline
+
+The project uses GitHub Actions to automatically deploy updates.
+
+Pipeline flow:
+
+1. Push code to `main`
+2. GitHub Actions builds the Docker image
+3. Image is pushed to Amazon ECR
+4. ECS service is forced to deploy the new image
+5. Health check verifies the application is running
+
+This enables automated end-to-end deployment.
 
 ## Future Improvements
 
