@@ -29,3 +29,26 @@ jobs:
           tags: |
             764283926008.dkr.ecr.us-east-1.amazonaws.com/ecs-codeserver:latest
             764283926008.dkr.ecr.us-east-1.amazonaws.com/ecs-codeserver:${{ github.sha }}
+
+      - name: Force ECS deployment
+        run: |
+          aws ecs update-service \
+            --cluster ecs-codeserver-tf-cluster \
+            --service ecs-codeserver-tf-service \
+            --force-new-deployment \
+            --region us-east-1
+
+      - name: Wait for service and check /login endpoint
+        run: |
+          echo "Waiting for service..."
+          for i in {1..30}; do
+            code=$(curl -fsS -o /dev/null -w "%{http_code}" https://tm.nahim-dev.com/login || true)
+            if [ "$code" = "200" ]; then
+              echo "Service is healthy ✅"
+              exit 0
+            fi
+            echo "Got HTTP $code, retrying in 10s... (attempt $i/30)"
+            sleep 10
+          done
+          echo "Service did not become healthy in time ❌"
+          exit 1
