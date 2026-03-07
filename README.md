@@ -109,6 +109,9 @@ Pipeline flow:
 
 This enables automated end-to-end deployment.
 
+<img width="1430" height="791" alt="Screenshot 2026-03-07 at 00 23 00" src="https://github.com/user-attachments/assets/1331944d-a750-4b89-b08e-f358e27ed4cf" />
+
+
 ## Future Improvements
 
 - Implement CI/CD using GitHub Actions
