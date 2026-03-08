@@ -1,14 +1,26 @@
 output "vpc_id" {
-  description = "The ID of the VPC"
-  value       = aws_vpc.ecs_codeserver_vpc.id
+  value = module.vpc.vpc_id
 }
 
 output "subnet_ids" {
-  description = "The IDs of the subnets"
-  value       = [aws_subnet.ecs_codeserver_subnet.id, aws_subnet.ecs_codeserver_subnet_2.id]
+  value = [
+    module.vpc.public_subnet_1_id,
+    module.vpc.public_subnet_2_id
+  ]
 }
 
-output "public_route_table_id" {
-  description = "The ID of the public route table"
-  value       = aws_route_table.ecs_codeserver_rt.id
+output "alb_dns_name" {
+  value = module.alb.alb_dns_name
+}
+
+output "target_group_arn" {
+  value = module.alb.target_group_arn
+}
+
+output "ecs_cluster_name" {
+  value = module.ecs.cluster_name
+}
+
+output "ecs_service_name" {
+  value = module.ecs.service_name
 }
