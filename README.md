@@ -1,3 +1,4 @@
+![CI](https://github.com/Nahim2003/code-server/actions/workflows/build-and-push.yml/badge.svg)
 ## Project Overview
 
 This project deploys code-server to AWS using containerised infrastructure.
@@ -94,6 +95,24 @@ aws elbv2 describe-target-health --region us-east-1 --target-group-arn <TG_ARN>
        controls>
 </video>
 
+## CI/CD Pipeline
+
+The project uses GitHub Actions to automatically deploy updates.
+
+Pipeline flow:
+
+1. Push code to `main`
+2. GitHub Actions builds the Docker image
+3. Image is pushed to Amazon ECR
+4. ECS service is forced to deploy the new image
+5. Health check verifies the application is running
+
+This enables automated end-to-end deployment.
+
+<img width="1430" height="791" alt="Screenshot 2026-03-07 at 00 23 00" src="https://github.com/user-attachments/assets/1331944d-a750-4b89-b08e-f358e27ed4cf" />
+<img width="1436" height="697" alt="Screenshot 2026-03-07 at 00 27 04" src="https://github.com/user-attachments/assets/b8f189db-0968-4b3d-a17f-cc2ecf94b3fb" />
+
+
 ## Future Improvements
 
 - Implement CI/CD using GitHub Actions
@@ -118,3 +137,9 @@ Debugging these issues improved my understanding of:
 - ALB target groups and health checks
 - Docker image architecture
 - Terraform infrastructure lifecycle
+
+## Deployment Status
+
+This project was deployed to AWS ECS Fargate behind an Application Load Balancer with a custom domain via Route53.
+
+The infrastructure has since been destroyed to avoid ongoing AWS charges, but the full infrastructure code and CI/CD pipeline remain in the repository.
