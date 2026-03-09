@@ -40,12 +40,19 @@ jobs:
 
       - name: Terraform plan
         working-directory: infra
+        env:
+          TF_VAR_password: ${{ secrets.CODE_SERVER_PASSWORD }}
         run: terraform plan -input=false -out=tfplan
+        # Ensure CODE_SERVER_PASSWORD is set in repository secrets: 
+        # Settings > Secrets and variables > Actions > New repository secret
 
       - name: Terraform apply
         working-directory: infra
+        env:
+          TF_VAR_password: ${{ secrets.CODE_SERVER_PASSWORD }}
         run: terraform apply -auto-approve -input=false tfplan
-
+        # Ensure CODE_SERVER_PASSWORD is set in repository secrets: 
+        # Settings > Secrets and variables > Actions > New repository secret
       - name: Force ECS deployment
         run: |
           aws ecs update-service \
