@@ -31,7 +31,6 @@ variable "image_uri" {
 variable "password" {
   type      = string
   sensitive = true
-  default   = "Nahimahmed2003"
 }
 
 variable "log_group_name" {

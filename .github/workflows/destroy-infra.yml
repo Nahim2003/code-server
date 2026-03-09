@@ -29,4 +29,7 @@ jobs:
 
       - name: Terraform destroy
         working-directory: infra
+        env:
+          # Ensure CODE_SERVER_PASSWORD is set in repository secrets or remove this line if not needed
+          TF_VAR_password: ${{ secrets.CODE_SERVER_PASSWORD }}
         run: terraform destroy -auto-approve -input=false
