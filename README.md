@@ -1,145 +1,315 @@
-![CI](https://github.com/Nahim2003/code-server/actions/workflows/build-and-push.yml/badge.svg)
-## Project Overview
+# code-server on AWS ECS Fargate
 
-This project deploys code-server to AWS using containerised infrastructure.
+This project deploys **code-server** to AWS using containerised infrastructure.
 
-The environment is provisioned using Terraform and runs on ECS Fargate behind an
-Application Load Balancer with HTTPS termination.
+The environment is provisioned using **Terraform** and runs on **ECS Fargate** behind an **Application Load Balancer with HTTPS termination**.
 
-The goal of this project was to build a production-style container deployment
-using AWS networking, load balancing, and infrastructure as code.
+The goal of this project was to build a production-style container deployment using AWS networking, load balancing, infrastructure as code, and CI/CD automation.
 
-URL: https://tm.nahim-dev.com
+---
 
-## Architecture
+# Live Demo
 
-Client → Route53 → ALB (443 HTTPS) → Target Group (HTTP 8080) → ECS Fargate Task (code-server)
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/b7e5128e-4cbf-43c1-aa9e-9fb246d058bc" width="700" alt="ECS architecture diagram" />
-</p>
+URL:  
+https://tm.nahim-dev.com
 
-## Tech Stack
+
+<img width="345" height="67" alt="Screenshot 2026-03-10 at 23 23 30" src="https://github.com/user-attachments/assets/006d9de4-91b0-4c7b-8c8e-e105609cf6b6" />
+
+
+---
+
+# Architecture
+
+Request flow:
+
+Client → Route53 → ALB (HTTPS 443) → Target Group (HTTP 8080) → ECS Fargate Task → code-server
+
+## Architecture Diagram
+
+<img width="1371" height="1356" alt="ecs diagram drawio" src="https://github.com/user-attachments/assets/08db8087-b820-451c-a4f9-56594b89fc44" />
+
+
+---
+
+# Tech Stack
 
 - AWS ECS Fargate
 - Application Load Balancer
-- Route 53
-- AWS Certificate Manager
+- Amazon Route53
+- AWS Certificate Manager (ACM)
 - Amazon VPC
 - Terraform
 - Docker
 - Amazon ECR
+- GitHub Actions
 - code-server
 
-## Deployment Flow
+---
+
+# Local Setup
+
+Clone the repository:
+
+```bash
+git clone https://github.com/Nahim2003/code-server.git
+cd code-server
+```
+
+Build the Docker image:
+
+```bash
+docker build -t ecs-codeserver .
+```
+
+Run the container locally:
+
+```bash
+docker run -p 8080:8080 ecs-codeserver
+```
+
+Open in browser:
+
+```
+http://localhost:8080
+```
+
+---
+
+# Project Structure
+
+```
+.
+├── .github/workflows
+│   ├── build-and-push.yml
+│   ├── deploy-infra.yml
+│   └── destroy-infra.yml
+├── infra
+│   ├── main.tf
+│   ├── backend.tf
+│   ├── provider.tf
+│   ├── variables.tf
+│   ├── outputs.tf
+│   ├── acm.tf
+│   ├── iam.tf
+│   ├── ecs_exec.tf
+│   └── modules
+│       ├── alb
+│       ├── ecs
+│       └── vpc
+├── wrapper
+│   └── code-server
+├── Dockerfile
+├── start.sh
+└── README.md
+```
+
+---
+
+# Deployment Flow
 
 1. A Docker image is built for the code-server application.
 2. The image is pushed to **Amazon ECR**.
 3. **Terraform** provisions the AWS infrastructure including:
    - VPC
-   - Public subnets
+   - public subnets
    - Application Load Balancer
    - ECS cluster and service
    - Route53 DNS configuration
-4. The **ECS Fargate service** pulls the container image from ECR.
-5. The **Application Load Balancer** routes HTTPS traffic to the ECS tasks.
-6. The container runs **code-server** on port `8080`.
-7. ALB health checks (`/login`) ensure the container is healthy and available.
+   - ACM certificate
+4. The ECS Fargate service pulls the container image from ECR.
+5. The Application Load Balancer routes HTTPS traffic to ECS tasks.
+6. The container runs **code-server on port 8080**.
+7. ALB health checks ensure the container is healthy.
 
-## Key Config
+---
 
-* code-server binds: 0.0.0.0:8080
+# Key Configuration
 
-- Target group: ip targets, port 8080
+code-server bind address:
 
-- Health check: GET /login (200–399)
+```
+0.0.0.0:8080
+```
 
-- HTTPS terminated at ALB (ACM cert)
+Target group configuration:
 
-- Image built for linux/amd64 (required for Fargate)
+```
+Type: ip
+Port: 8080
+```
 
-## Deploy
+Health check configuration:
+
+```
+Path: /login
+Success codes: 200-399
+```
+
+HTTPS is terminated at the **Application Load Balancer using ACM certificates**.
+
+Docker image is built for:
+
+```
+linux/amd64
+```
+
+This is required for ECS Fargate.
+
+---
+
+# Deploy Infrastructure
+
+```
 terraform init
 terraform apply
+```
 
-## Build + Push (ECR)
+---
+
+# Build and Push Docker Image
+
+Authenticate to ECR:
+
+```
 aws ecr get-login-password --region us-east-1 \
 | docker login --username AWS --password-stdin 764283926008.dkr.ecr.us-east-1.amazonaws.com
+```
 
+Build and push the container:
+
+```
 docker buildx build --platform linux/amd64 -t ecs-codeserver:vX .
-docker tag ecs-codeserver:vX 764283926008.dkr.ecr.us-east-1.amazonaws.com/ecs-codeserver:vX
-docker push 764283926008.dkr.ecr.us-east-1.amazonaws.com/ecs-codeserver:vX
 
-## Force ECS redeploy
+docker tag ecs-codeserver:vX \
+764283926008.dkr.ecr.us-east-1.amazonaws.com/ecs-codeserver:vX
+
+docker push \
+764283926008.dkr.ecr.us-east-1.amazonaws.com/ecs-codeserver:vX
+```
+
+---
+
+# Force ECS Redeploy
+
+```
 aws ecs update-service \
-  --region us-east-1 \
-  --cluster ecs-codeserver-tf-cluster \
-  --service ecs-codeserver-tf-service \
-  --force-new-deployment
+--region us-east-1 \
+--cluster ecs-codeserver-tf-cluster \
+--service ecs-codeserver-tf-service \
+--force-new-deployment
+```
 
-## Verify
+---
+
+# Verify Deployment
+
+```
 curl -I https://tm.nahim-dev.com/login
-aws elbv2 describe-target-health --region us-east-1 --target-group-arn <TG_ARN>
+```
 
-## Debugging Highlights
+Check target health:
 
-* Fixed 502/503/504 from port/health-check mismatches
+```
+aws elbv2 describe-target-health \
+--region us-east-1 \
+--target-group-arn <TARGET_GROUP_ARN>
+```
 
-- Fixed WebSocket errors by aligning ALB → container flow
+---
 
-- Fixed CannotPullContainerError (linux/amd64) with buildx --platform linux/amd64
+# Live Demo
 
-- Resolved Terraform SG rule drift via import/state cleanup
-## Live demo
-<video src="https://github.com/user-attachments/assets/97e836b8-d4f1-44a7-9b36-869e3638e794"
-       width="700"
-       controls>
-</video>
+Demo recording:
 
-## CI/CD Pipeline
 
-The project uses GitHub Actions to automatically deploy updates.
+[recording-2026-03-10-23-34-53.webm](https://github.com/user-attachments/assets/6c83d00a-309e-4f30-b0df-dbeb1ac7b6a3)
+
+
+
+---
+
+# CI/CD Pipeline
+
+The project uses **GitHub Actions** to automate deployments.
 
 Pipeline flow:
 
 1. Push code to `main`
 2. GitHub Actions builds the Docker image
-3. Image is pushed to Amazon ECR
-4. ECS service is forced to deploy the new image
-5. Health check verifies the application is running
+3. The image is pushed to **Amazon ECR**
+4. ECS service deploys the new container
+5. Health checks confirm the application is running
 
 This enables automated end-to-end deployment.
 
-<img width="1430" height="791" alt="Screenshot 2026-03-07 at 00 23 00" src="https://github.com/user-attachments/assets/1331944d-a750-4b89-b08e-f358e27ed4cf" />
-<img width="1436" height="697" alt="Screenshot 2026-03-07 at 00 27 04" src="https://github.com/user-attachments/assets/b8f189db-0968-4b3d-a17f-cc2ecf94b3fb" />
+---
 
+# Pipeline Screenshots
 
-## Future Improvements
+## Build and Push Pipeline
 
-- Implement CI/CD using GitHub Actions
-- Add CloudWatch logging and monitoring
-- Configure ECS service autoscaling
-- Deploy ECS tasks in private subnets
-- Add WAF protection in front of the ALB
+```
+![Build Pipeline](pipeline-build.png)
+```
 
-## Lessons Learned
+## Deploy Infrastructure Pipeline
 
-While building this project I encountered several real-world deployment issues:
+```
+![Deploy Pipeline](pipeline-deploy.png)
+```
 
-- **ALB health check failures** caused ECS tasks to continuously drain.
-- **WebSocket errors** when accessing code-server through the load balancer.
-- **Docker architecture mismatch** between ARM (local machine) and AMD64 (ECS runtime).
-- **Target group misconfiguration** that caused tasks to register but fail health checks.
-- **Terraform state conflicts** when modifying security group rules.
+## Destroy Infrastructure Pipeline
 
-Debugging these issues improved my understanding of:
+```
+![Destroy Pipeline](pipeline-destroy.png)
+```
+
+---
+
+# Debugging Highlights
+
+During development several real-world deployment issues were encountered:
+
+- 502 / 503 / 504 errors caused by **port and health-check mismatches**
+- WebSocket issues when accessing code-server through the load balancer
+- Docker architecture mismatch between **ARM (local machine)** and **AMD64 (ECS runtime)**
+- Target group misconfiguration causing tasks to register but fail health checks
+- Terraform security group rule drift requiring **state cleanup**
+
+---
+
+# Lessons Learned
+
+While building this project I encountered several infrastructure challenges:
+
+- ECS tasks draining due to failing ALB health checks
+- WebSocket connectivity issues behind the load balancer
+- Docker architecture mismatches between development and production
+- Terraform state conflicts when modifying security group rules
+
+These debugging sessions improved my understanding of:
 
 - ECS service deployments
 - ALB target groups and health checks
-- Docker image architecture
+- Docker multi-architecture builds
 - Terraform infrastructure lifecycle
+- CI/CD deployment pipelines
 
-## Deployment Status
+---
 
-This project was deployed to AWS ECS Fargate behind an Application Load Balancer with a custom domain via Route53.
+# Future Improvements
 
-The infrastructure has since been destroyed to avoid ongoing AWS charges, but the full infrastructure code and CI/CD pipeline remain in the repository.
+- Add Terraform **plan pipeline**
+- Implement **CloudWatch monitoring and alarms**
+- Configure **ECS service autoscaling**
+- Deploy ECS tasks in **private subnets**
+- Add **AWS WAF** in front of the ALB
+
+---
+
+# Deployment Status
+
+This project was successfully deployed to **AWS ECS Fargate behind an Application Load Balancer with HTTPS using Route53 and ACM**.
+
+The infrastructure has since been **destroyed to avoid ongoing AWS charges**, but the full Terraform configuration, CI/CD pipelines, and project documentation remain available in this repository.
