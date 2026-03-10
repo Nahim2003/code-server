@@ -249,15 +249,11 @@ This enables automated end-to-end deployment.
 
 ## Build and Push Pipeline
 
-```
-![Build Pipeline](pipeline-build.png)
-```
+<img width="1430" height="791" alt="Screenshot 2026-03-07 at 00 23 00" src="https://github.com/user-attachments/assets/8384ee59-9f84-4dd7-8dd1-910d6720c57c" />
 
 ## Deploy Infrastructure Pipeline
 
-```
-![Deploy Pipeline](pipeline-deploy.png)
-```
+<img width="1436" height="697" alt="Screenshot 2026-03-07 at 00 27 04" src="https://github.com/user-attachments/assets/dac3f0b5-67aa-4912-9302-a1f9185605fe" />
 
 ## Destroy Infrastructure Pipeline
 
