@@ -223,7 +223,8 @@ aws elbv2 describe-target-health \
 Demo recording:
 
 
-[recording-2026-03-10-23-34-53.webm](https://github.com/user-attachments/assets/6c83d00a-309e-4f30-b0df-dbeb1ac7b6a3)
+[recording-2026-03-03-15-16-01.webm](https://github.com/user-attachments/assets/f6d83835-a09f-4de5-bb1a-5926699e5fe6)
+
 
 
 
