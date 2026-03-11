@@ -257,9 +257,7 @@ This enables automated end-to-end deployment.
 
 ## Destroy Infrastructure Pipeline
 
-```
-![Destroy Pipeline](pipeline-destroy.png)
-```
+<img width="1437" height="694" alt="Screenshot 2026-03-11 at 00 03 26" src="https://github.com/user-attachments/assets/1732d3a9-7e13-403b-a899-6085e100a2d5" />
 
 ---
 
