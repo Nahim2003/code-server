@@ -85,20 +85,22 @@ http://localhost:8080
 │   ├── deploy-infra.yml
 │   └── destroy-infra.yml
 ├── infra
-│   ├── main.tf
+│   ├── modules
+│   │   ├── alb
+│   │   ├── ecs
+│   │   └── vpc
+│   ├── acm.tf
 │   ├── backend.tf
+│   ├── ecs_exec.tf
+│   ├── iam.tf
+│   ├── main.tf
+│   ├── outputs.tf
 │   ├── provider.tf
 │   ├── variables.tf
-│   ├── outputs.tf
-│   ├── acm.tf
-│   ├── iam.tf
-│   ├── ecs_exec.tf
-│   └── modules
-│       ├── alb
-│       ├── ecs
-│       └── vpc
 ├── wrapper
-│   └── code-server
+│   ├── code-server
+│   ├── package.json
+│   └── package-lock.json
 ├── Dockerfile
 ├── start.sh
 └── README.md
