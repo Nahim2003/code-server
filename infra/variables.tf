@@ -23,11 +23,6 @@ variable "az_2" {
   default = "us-east-1b"
 }
 
-variable "image_uri" {
-  type    = string
-  default = "764283926008.dkr.ecr.us-east-1.amazonaws.com/ecs-codeserver:v18"
-}
-
 variable "password" {
   type      = string
   sensitive = true
@@ -42,3 +37,14 @@ variable "aws_region" {
   type    = string
   default = "us-east-1"
 }
+
+variable "ecr_repository_name" {
+  type    = string
+  default = "ecs-codeserver"
+}
+
+variable "image_tag" {
+  type    = string
+  default = "latest"
+}
+
