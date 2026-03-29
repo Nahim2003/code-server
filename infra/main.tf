@@ -26,10 +26,16 @@ module "ecs" {
   alb_sg_id          = module.alb.alb_sg_id
   target_group_arn   = module.alb.target_group_arn
 
-  image_uri          = var.image_uri
+  image_uri          = local.image_uri
   execution_role_arn = aws_iam_role.ecs_codeserver_task_execution_role.arn
   task_role_arn      = aws_iam_role.ecs_codeserver_task_execution_role.arn
   password           = var.password
   log_group_name     = var.log_group_name
   aws_region         = var.aws_region
+}
+
+data "aws_caller_identity" "current" {}
+
+locals {
+  image_uri = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/${var.ecr_repository_name}:${var.image_tag}"
 }
