@@ -14,7 +14,8 @@ URL:
 https://tm.nahim-dev.com
 
 
-<img width="345" height="67" alt="Screenshot 2026-03-10 at 23 23 30" src="https://github.com/user-attachments/assets/006d9de4-91b0-4c7b-8c8e-e105609cf6b6" />
+[code-server-architecture.pdf](https://github.com/user-attachments/files/27199345/code-server-architecture.pdf)
+
 
 
 ---
