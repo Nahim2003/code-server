@@ -14,10 +14,6 @@ URL:
 https://tm.nahim-dev.com
 
 
-[code-server-architecture.pdf](https://github.com/user-attachments/files/27199345/code-server-architecture.pdf)
-
-
-
 ---
 
 # Architecture
