@@ -24,7 +24,7 @@ Client → Route53 → ALB (HTTPS 443) → Target Group (HTTP 8080) → ECS Farg
 
 ## Architecture Diagram
 
-<img width="1820" height="1180" alt="code-server-architecture_1 drawio-2" src="https://github.com/user-attachments/assets/dad3e4f1-9e7d-46bc-9932-55850c7bfbb4" />
+<img width="574" height="526" alt="Screenshot 2026-06-10 at 11 41 09" src="https://github.com/user-attachments/assets/66d83698-22e8-4da1-8bc0-5a243e4a11f8" />
 
 
 
