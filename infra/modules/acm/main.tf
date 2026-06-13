@@ -1,10 +1,10 @@
 data "aws_route53_zone" "selected" {
-  name         = "nahim-dev.com"
+  name         = var.zone_name
   private_zone = false
 }
 
 resource "aws_acm_certificate" "ecs_codeserver_cert" {
-  domain_name       = "tm.nahim-dev.com"
+  domain_name       = var.domain_name
   validation_method = "DNS"
 
   lifecycle {
