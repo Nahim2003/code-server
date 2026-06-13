@@ -8,13 +8,24 @@ module "vpc" {
   az_2                 = var.az_2
 }
 
+module "acm" {
+  source = "./modules/acm"
+
+  domain_name = "tm.nahim-dev.com"
+  zone_name   = "nahim-dev.com"
+}
+
 module "alb" {
   source = "./modules/alb"
 
   vpc_id             = module.vpc.vpc_id
   public_subnet_1_id = module.vpc.public_subnet_1_id
   public_subnet_2_id = module.vpc.public_subnet_2_id
-  certificate_arn    = aws_acm_certificate_validation.ecs_codeserver.certificate_arn
+  certificate_arn    = module.acm.certificate_arn
+}
+
+module "iam" {
+  source = "./modules/iam"
 }
 
 module "ecs" {
@@ -27,8 +38,8 @@ module "ecs" {
   target_group_arn   = module.alb.target_group_arn
 
   image_uri          = local.image_uri
-  execution_role_arn = aws_iam_role.ecs_codeserver_task_execution_role.arn
-  task_role_arn      = aws_iam_role.ecs_codeserver_task_execution_role.arn
+  execution_role_arn = module.iam.execution_role_arn
+  task_role_arn      = module.iam.execution_role_arn
   password           = var.password
   log_group_name     = var.log_group_name
   aws_region         = var.aws_region
