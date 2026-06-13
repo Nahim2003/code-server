@@ -14,9 +14,6 @@ URL:
 https://tm.nahim-dev.com
 
 
-<img width="345" height="67" alt="Screenshot 2026-03-10 at 23 23 30" src="https://github.com/user-attachments/assets/006d9de4-91b0-4c7b-8c8e-e105609cf6b6" />
-
-
 ---
 
 # Architecture
@@ -27,7 +24,10 @@ Client → Route53 → ALB (HTTPS 443) → Target Group (HTTP 8080) → ECS Farg
 
 ## Architecture Diagram
 
-<img width="1371" height="1356" alt="ecs diagram drawio" src="https://github.com/user-attachments/assets/08db8087-b820-451c-a4f9-56594b89fc44" />
+<p align="center">
+  <img width="795" height="622" alt="Screenshot 2026-06-10 at 11 45 34" src="https://github.com/user-attachments/assets/b6baecfb-f438-453c-9154-4d6b13499f4e" />
+</p>
+
 
 
 ---
