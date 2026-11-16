@@ -5,7 +5,7 @@ resource "aws_iam_openid_connect_provider" "github" {
 }
 
 resource "aws_iam_role" "github_actions" {
-  name = "github-actions-code-server"
+  name                 = "github-actions-code-server"
   max_session_duration = 7200
 
   assume_role_policy = jsonencode({
