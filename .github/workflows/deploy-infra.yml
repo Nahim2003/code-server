@@ -65,7 +65,7 @@ jobs:
         run: |
           echo "Waiting for service..."
           for i in {1..30}; do
-            code=$(curl -fsS -o /dev1null -w "%{http_code}" https://tm.nahim-dev.com/login || true)
+            code=$(curl -fsS -o /dev/null -w "%{http_code}" https://tm.nahim-dev.com/login || true)
             if [ "$code" = "200" ]; then
               echo "Service is healthy ✅"
               exit 0
